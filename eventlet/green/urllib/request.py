@@ -37,7 +37,12 @@ to_patch_in_functions = [('ftplib', ftplib)]
 del ftplib
 
 FTPHandler.ftp_open = patcher.patch_function(FTPHandler.ftp_open, *to_patch_in_functions)
-URLopener.open_ftp = patcher.patch_function(URLopener.open_ftp, *to_patch_in_functions)
+
+try:
+    URLopener.open_ftp = patcher.patch_function(URLopener.open_ftp, *to_patch_in_functions)
+except NameError:
+    # Removed in python3.14+, nothing to do
+    pass
 
 ftperrors = patcher.patch_function(ftperrors, *to_patch_in_functions)
 

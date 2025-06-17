@@ -47,6 +47,7 @@ class GreenFileIO(_OriginalIOBase):
         self._closed = False
         set_nonblocking(self)
         self._seekable = None
+        self._blksize = DEFAULT_BUFFER_SIZE
 
     @property
     def closed(self):
@@ -112,6 +113,9 @@ class GreenFileIO(_OriginalIOBase):
             return _original_os.isatty(self.fileno())
         except OSError as e:
             raise OSError(*e.args)
+
+    def _isatty_open_only(self):
+        return self.isatty()
 
     def _trampoline(self, fd, read=False, write=False, timeout=None, timeout_exc=None):
         if self._closed:
